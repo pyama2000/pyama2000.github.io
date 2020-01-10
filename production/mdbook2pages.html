@@ -139,7 +139,7 @@
 <blockquote>
 <p><a href="https://github.com/pyama2000/mdbook2pages">pyama2000/mdbook2pages</a></p>
 </blockquote>
-<p>Markdownから<em>book</em>を作成するツールに<a href="https://github.com/rust-lang/mdBook">rust-lang/mdBook</a>を利用しています。
+<p>Markdownから<em>book</em>を作成するツールに<a href="https://github.com/rust-lang/mdBook">rust-lang/mdBook</a>を利用します。
 このツールは<a href="https://www.gitbook.com/">GitBook</a>に似ていますが、<strong>Rust</strong>で書かれたものになっています。
 mdBook向けに書かれたMarkdownファイル群をGitHubにプッシュすることでGitHub ActionsでCI/CDを行い、
 本サイトのようにGitHub Pagesにデプロイします。</p>
@@ -174,14 +174,9 @@ RUN cargo install mdbook --vers &quot;^0.3.5&quot;
 EXPOSE 3000
 
 WORKDIR /mdbook
-
-CMD [&quot;mdbook&quot;, &quot;serve&quot;, &quot;--hostname&quot;, &quot;0.0.0.0&quot;]
 </code></pre>
 <p><code>cargo install</code>でmdbookをインストールしてますが、<code>--vers &quot;^0.3.5&quot;</code>とすることで
-インストールするバージョンを<strong>0.3.5</strong>から<strong>0.3.x</strong>までに指定しています。
-作業ディレクトリを<code>/mdbook</code>にし、コンテナが起動時に<code>mdbook serve --hostname 0.0.0.0</code>
-を実行します。mdBookはデフォルトで3000番ポートを使用していますが、<code>-p</code>オプションでポート番号を
-変更できます。<code>mdbook serve</code>はファイルが更新されると自動でビルドするコマンドです。</p>
+インストールするバージョンを<strong>0.3.5</strong>から<strong>0.3.x</strong>までに指定しています。</p>
 <h3><a class="header" href="#22-docker-composeyml" id="22-docker-composeyml">2.2 docker-compose.yml</a></h3>
 <pre><code class="language-yaml:docker-compose.yml">version: &quot;3&quot;
 services:
@@ -193,9 +188,8 @@ services:
       - 3000:3000
     container_name: mdbook2pages_mdbook
 </code></pre>
-<p><code>docker-compose up --build</code>で2.1節のDockerfileをビルドします。<code>-d</code>オプションでバックグラウンドで
-実行できます。</p>
-<p>これでmdBookを編集、閲覧できる環境が整いました。</p>
+<p><code>docker-compose up --build</code>で2.1節のDockerfileをビルドします。
+これでmdBookを編集、閲覧できる環境が整いました。</p>
 <h2><a class="header" href="#3-mdbookの使い方" id="3-mdbookの使い方">3. mdBookの使い方</a></h2>
 <h3><a class="header" href="#31-プロジェクトの初期化" id="31-プロジェクトの初期化">3.1 プロジェクトの初期化</a></h3>
 <p><code>mdbook init</code>で最小限の構成でmdBookを開始できます。</p>
@@ -207,20 +201,23 @@ mdbook2pages
    ├── chapter_1.md
    └── SUMMARY.md
 </code></pre>
-<p><code>book</code>ディレクトリはmdBookでビルドしたファイルが格納されるディレクトリで、デプロイする際に利用します。<br />
-<code>src</code>ディレクトリはMarkdownファイル群になっており、<code>SUMMARY.md</code>はサイドメニューです。</p>
+<p><strong>book</strong>ディレクトリはmdBookでビルドしたファイルが格納されるディレクトリで、デプロイする際に利用します。<br />
+<strong>src</strong>ディレクトリはMarkdownファイル群になっており、<strong>SUMMARY.md</strong>はサイドメニューです。</p>
 <pre><code class="language-markdown:SUMMARY.md"># Summary
 
 - [Chapter 1](./chapter_1.md)
 </code></pre>
-<p>この状態で<code>mdbook serve</code>を実行し、ブラウザでlocalhost:3000にアクセスすると以下のように
-左側にサイドメニューが表示されます。<br />
-<strong>※ 画像は上記のMarkdownの実行結果ではありません。</strong></p>
+<h3><a class="header" href="#32-markdownのビルド閲覧" id="32-markdownのビルド閲覧">3.2 Markdownのビルド、閲覧</a></h3>
+<p><code>mdbook build</code>で3.1節で作成されたMarkdownファイル群をビルドできます。ビルドされたファイルは
+<strong>book</strong>ディレクトリに格納されているので、<strong>book/index.html</strong>をブラウザで開くと閲覧ができます。</p>
+<p><code>mdbook serve --hostname 0.0.0.0</code>は<strong>src</strong>ディレクトリ以下のファイルを監視し、変更があった場合自動で再ビルドします。
+また、<code>http://localhost:3000</code>にアクセスすることで閲覧することができます。
+mdBookはデフォルトで3000番ポートを使用していますが、<code>-p</code>オプションでポート番号を変更できます。</p>
 <p><img src="https://user-images.githubusercontent.com/33086493/72126054-118cfd00-33ae-11ea-8369-b217005d36d0.png" alt="summary image" /></p>
-<h3><a class="header" href="#32-記事の追加" id="32-記事の追加">3.2 記事の追加</a></h3>
-<p><code>src</code>ディレクトリ以下にMarkdownファイルを追加、または<code>SUMMARY.md</code>や他のMarkdownファイルで
+<h3><a class="header" href="#33-記事の追加" id="33-記事の追加">3.3 記事の追加</a></h3>
+<p><strong>src</strong>ディレクトリ以下にMarkdownファイルを追加、または<strong>SUMMARY.md</strong>や他のMarkdownファイルで
 他の記事をリンクするとビルド時に自動的にファイルが生成されます。<br />
-また、<code>src/production</code>のようにディレクトリを作成して、そこにMarkdownファイルを追加することもできます。</p>
+また、<strong>src/production</strong>のようにディレクトリを作成して、そこにMarkdownファイルを追加することもできます。</p>
 <pre><code class="language-shell">$ cat SUMMARY.md
 # Summary
 
@@ -255,14 +252,105 @@ mdbook2pages
 <pre><code>mdbook2pages
 └── .github
    ├── actions
-   │  └── deploy
-   │     ├── Dockerfile
-   │     └── entrypoint.sh
+   │  └── build
+   │     └── Dockerfile
    └── workflows
       └── main.yml
 </code></pre>
-<h3><a class="header" href="#41-アクションを作成" id="41-アクションを作成">4.1 アクションを作成</a></h3>
-<h3><a class="header" href="#42-ワークフローを作成" id="42-ワークフローを作成">4.2 ワークフローを作成</a></h3>
+<h3><a class="header" href="#41-github-pages用のリポジトリを作成" id="41-github-pages用のリポジトリを作成">4.1 GitHub Pages用のリポジトリを作成</a></h3>
+<p>GitHub Pagesは、GitHubのリポジトリからHTML、CSS、JavaScriptファイルを取得し、
+ウェブサイトを公開できる静的なウェブサイトホスティングサービスです。</p>
+<p>GitHub Pages用に<code>&lt;USER_NAME&gt;.github.io</code>というリポジトリを作成してください。<br />
+<strong>※ この例では<code>pyama2000.github.io</code></strong></p>
+<p><img src="https://user-images.githubusercontent.com/33086493/72165777-7591de80-340b-11ea-95ad-65d0912e0361.png" alt="Create GitHub Pages repository" /></p>
+<p>リポジトリを作成することができたら、適当に<strong>index.html</strong>をプッシュし、
+<code>https://&lt;USER_NAME&gt;.github.io</code>でユーザのウェブサイトにアクセスすることができます。</p>
+<p>ユーザ用のサイトは1つしか作成できませんが、プロジェクトごとにもGitHub Pagesを作成することができます。
+プロジェクトサイトを公開するには<strong>gh-pages</strong>ブランチにHTML、CSS、JavaScriptか、
+<strong>master</strong>ブランチの/docsディレクトリを配置することで公開できます。
+プロジェクトサイトのURLは<code>https://&lt;USER_NAME&gt;.github.io/&lt;REPOSITORY_NAME&gt;</code>となります。</p>
+<p>詳細については<a href="https://help.github.com/ja/github/working-with-github-pages/about-github-pages">GitHub Pages について - GitHub ヘルプ</a>を参照してください。</p>
+<h3><a class="header" href="#42-秘密鍵公開鍵の作成" id="42-秘密鍵公開鍵の作成">4.2 秘密鍵・公開鍵の作成</a></h3>
+<p>GitHub Pagesを公開するのに公開アクションである<a href="https://github.com/marketplace/actions/github-pages-action">GitHub Pages action · Actions · GitHub Marketplace</a>を使用します。そのために秘密鍵・公開鍵を生成し、
+それぞれのリポジトリに配置する必要があります。</p>
+<p>以下のコマンドで秘密鍵と公開鍵のペアを作成します。</p>
+<pre><code class="language-shell">$ ssh-keygen -t rsa -b 4096 -C &quot;$(git config user.email)&quot; -f gh-pages -N &quot;&quot;
+</code></pre>
+<p><code>-C</code>オプションでGitに登録しているメールアドレスをコメントとして渡し、
+<code>-N</code>オプションでパスフレーズを空白として、<code>-f</code>オプションによってpg-pagesというファイル名で
+キーペアを作成します。
+作成したキーペアはコマンドを実行したディレクトリの直下に生成されます。</p>
+<p>作成されたキーペアの公開鍵(<strong>gh-pages</strong>)の内容を4.1節で作成したGitHub Pages用のリポジトリ
+(<strong>&lt;USER_NAME&gt;.github.io</strong>)の<code>Settings &gt; Deploy keys</code>に任意の名前で登録します。
+また、<strong>Allow write access</strong>にチェックを入れるのを忘れないでください。</p>
+<p><img src="https://user-images.githubusercontent.com/33086493/72167663-e686c580-340e-11ea-9fa1-08354ccbb61c.png" alt="Add Deploy keys" /></p>
+<p>秘密鍵は、mdBookでビルドするリポジトリ(ここでは<strong>mdbook2pages</strong>)の<code>Settings &gt; Secrets</code>に
+<strong>ACTIONS_DEPLOY_KEY</strong>という名前で登録します。</p>
+<p><img src="https://user-images.githubusercontent.com/33086493/72167670-e8508900-340e-11ea-93f7-c55832450af1.png" alt="Add Secrets" /></p>
+<h3><a class="header" href="#43-アクションを作成" id="43-アクションを作成">4.3 アクションを作成</a></h3>
+<p>ワークフローでmdBookをビルドするアクションを定義します。<br />
+<strong>.github/actions/build/Dockerfile</strong>を作成し、以下のように記述してください。</p>
+<pre><code class="language-dockerfile:.github/actions/build/Dockerfile">FROM rust:latest
+
+RUN cargo install mdbook --no-default-features --features output --vers &quot;^0.3.5&quot;
+
+CMD [&quot;mdbook&quot;, &quot;build&quot;]
+</code></pre>
+<p>2.1節で作成したDockerfileと似ていますが、mdBookのインストールの際に<code>--no-default-features</code>オプションと
+<code>--features</code>オプションで<code>output</code>を指定することで、出力するためだけの機能をもったmdBookを
+インストールすることができます。<br />
+CMD命令により、ビルドされたコンテナに入ると自動的に<code>mdbook build</code>コマンドが実行されます。</p>
+<h3><a class="header" href="#44-ワークフローを作成" id="44-ワークフローを作成">4.4 ワークフローを作成</a></h3>
+<p>以上によりmdBookのビルド、公開するアクションの準備が整ったのでいよいよワークフローを定義します。<br />
+<strong>.github/workflows/main.yml</strong>が以下のコードとなっています。</p>
+<pre><code class="language-yaml:.github/workflows/main.yml">name: CI/CD
+on:
+  push:
+    branches:
+    - master
+    paths:
+    - &quot;src/**.md&quot;
+    - &quot;book.toml&quot;
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build
+      uses: ./.github/actions/build
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v2
+      env:
+        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        EXTERNAL_REPOSITORY: &lt;USER_NAME&gt;/&lt;USER_NAME&gt;.github.io
+        PUBLISH_BRANCH: master
+        PUBLISH_DIR: ./book
+</code></pre>
+<p>ワークフローの詳しい書き方は割愛しますが、このYAMLファイルにより、<strong>master</strong>ブランチに
+<strong>src/**.md</strong>または<strong>book.toml</strong>ファイルがプッシュされたら、<strong>deploy</strong>ジョブが実行されます。<br />
+deployジョブではファイルを取得し、<strong>Build</strong>ステップでは4.3節で定義したアクションを実行、
+<code>mdbook build</code>によってHTML一式を<strong>book</strong>ディレクトリ以下に生成します。<br />
+その後、peaceiris/actions-gh-pages@v2アクションによってデプロイを行っています。
+環境変数を与えることで外部リポジトリにプッシュしたりプッシュするブランチを指定できます。
+<code>ACTIONS_DEPLOY_KEY</code>は4.2節で登録した<strong>Secrets</strong>を参照し、<code>EXTERNAL_REPOSITORY</code>で外部リポジトリを
+定義しています。<code>EXTERNAL_REPOSITORY</code>の <em><strong>USER_NAME</strong></em> はご自身のユーザ名に置き換えてください。
+<code>PUBLISH_BRANCH</code>でプッシュするブランチを指定します。最後に、<code>PUBLISH_DIR</code>で<strong>Build</strong>ステップで
+生成された<strong>book</strong>ディレクトリをプッシュします。</p>
+<p>その他の環境変数は<a href="https://github.com/peaceiris/actions-gh-pages/blob/master/README.md">README.md</a>に記載されているので、こちらを参照してください。</p>
+<h2><a class="header" href="#5-完成したコードをプッシュ" id="5-完成したコードをプッシュ">5. 完成したコードをプッシュ</a></h2>
+<p>4章までに作成したコードをリポジトリ(<strong>ここではmdbook2pages</strong>))にプッシュするとGitHub Actionsが
+自動で実行され、エラーが発生しなかったら<strong>USER_NAME.github.io</strong>にHTML一式がプッシュされているはずです。</p>
+<p><img src="https://user-images.githubusercontent.com/33086493/72170077-a249f400-3413-11ea-88e1-45e5d2cf9c38.png" alt="Result of GitHub Actions" /></p>
+<p><img src="https://user-images.githubusercontent.com/33086493/72170676-a0346500-3414-11ea-9819-ed1683d1bf22.png" alt="GitHub Pages commit" /></p>
+<h2><a class="header" href="#おわりに" id="おわりに">おわりに</a></h2>
+<p>GitHub Actionsを利用することで、継続的にテストやビルド、デプロイ(CI/CD)ができるようになり、
+プッシュするだけでウェブサイトが更新されるようになりました。以前では、手動でビルドし、
+ビルドしたものをサーバにアップして...などの手順がめんどくさかったですが、GitHub Actionsによって
+Markdownファイルを書き、プッシュするだけですべての手順を自動でやってくれるため、
+書くことに集中することができるようになりました。
+また、mdBookではCSSやJavaScriptを独自に定義することができるため、今後はこのCSSやJavaScriptを
+リント、フォーマッティング、テストを行うアクションを定義したいと思います。</p>
 
                     </main>
 
