@@ -145,6 +145,12 @@ mdBook向けに書かれたMarkdownファイル群をGitHubにプッシュする
 本サイトのようにGitHub Pagesにデプロイします。</p>
 <h2><a class="header" href="#1-プロジェクトの構成図" id="1-プロジェクトの構成図">1. プロジェクトの構成図</a></h2>
 <pre><code>mdbook2pages
+├── .github
+│  ├── actions
+│  │  └── build
+│  │     └── Dockerfile
+│  └── workflows
+│     └── main.yml
 ├── book
 ├── book.toml
 ├── docker-compose.yml
