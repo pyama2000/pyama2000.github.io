@@ -150,16 +150,19 @@ mdBook向けに書かれたMarkdownファイル群をGitHubにプッシュする
 ├── docker-compose.yml
 ├── Dockerfile
 ├── README.md
-└── src
-   ├── introduction.md
-   ├── production
-   │  ├── mdbook2pages.md
-   │  ├── moses.md
-   │  ├── musa.md
-   │  ├── spotif_api.md
-   │  ├── tex2pdf.md
-   │  └── tof.md
-   └── SUMMARY.md
+├── src
+│  ├── introduction.md
+│  ├── production
+│  │  ├── mdbook2pages.md
+│  │  ├── moses.md
+│  │  ├── musa.md
+│  │  ├── spotify_api.md
+│  │  ├── tex2pdf.md
+│  │  └── tof.md
+│  └── SUMMARY.md
+└── theme
+   ├── custom.css
+   └── highlight.css
 </code></pre>
 <h2><a class="header" href="#2-mdbook環境の構築" id="2-mdbook環境の構築">2. mdBook環境の構築</a></h2>
 <p>mdBookはRust製のツールなのでローカルまたはDockerで<strong>Rust + mdBook</strong>を
